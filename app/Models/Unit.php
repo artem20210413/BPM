@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Unit
@@ -17,18 +18,21 @@ use Astrotomic\Translatable\Translatable;
  * @property Carbon created_at
  * @property Carbon updated_at
  */
-class Unit extends Model implements TranslatableContract
+class Unit extends TranslationContract
 {
-    use HasFactory, Translatable;
 
-    public array $translatedAttributes = ['title', 'content'];
-
-    /** Необязательно, но удобно явно указать модель перевода */
-    public $translationModel = UnitTranslation::class;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['slug', 'priority'];
 
     protected $casts = ['priority' => 'integer'];
+
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     /**
      * Сортировка по приоритету по умолчанию.
      */
