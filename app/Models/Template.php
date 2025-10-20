@@ -20,7 +20,7 @@ class Template extends TranslationContract
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['attribute_id', 'slug', 'data'];
+    protected $fillable = ['slug', 'data'];
     public function attribute()
     {
         return $this->belongsTo(Attribute::class);

@@ -25,7 +25,8 @@ class Attribute extends TranslationContract
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['unit_id', 'slug', 'priority'];
+    protected $fillable = ['slug', 'priority'];
+//    public $translationForeignKey = 'attribute_id';
 
 //    public function translations() { return $this->hasMany(ValueTranslation::class); }
 
