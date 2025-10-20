@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
@@ -18,14 +19,12 @@ Route::middleware('guest')->group(function () {
 // Логаут (только авторизованным)
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 
-// Админка (только после логина и с нужными ролями)
-//Route::middleware(['auth', 'role:Admin|SuperAdmin'])->group(function () {
-Route::middleware(['auth', 'role:Admin|SuperAdmin'])->group(function () {
-    Route::get('/admin', fn() => view('admin.dashboard'))->name('admin.dashboard');
-});
-
-Route::middleware(['auth', 'permission:manage users'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('users', UserController::class)->except(['show']);
+Route::middleware(['auth', 'role:Admin|SuperAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware(['role:Admin|SuperAdmin'])->group(function () {
+        Route::get('/admin', fn() => view('admin.dashboard'))->name('admin.dashboard');
+        Route::resource('units', UnitController::class)->except(['show']);
+        Route::resource('users', UserController::class)->except(['show']);
+    });
 });
 
 

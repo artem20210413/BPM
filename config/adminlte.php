@@ -305,6 +305,12 @@ return [
             'icon' => 'fas fa-fw fa-users',
             'can' => 'manage users',
         ],
+        [
+            'text'  => 'Единицы измерения',
+            'route' => 'admin.units.index',
+            'icon'  => 'fas fa-ruler',
+            'can'   => 'manage products', // или своя permission 'manage units'
+        ],
 //        // Navbar items:
 //        [
 //            'type' => 'navbar-search',

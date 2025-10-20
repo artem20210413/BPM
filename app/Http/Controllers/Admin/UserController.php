@@ -36,7 +36,11 @@ class UserController extends Controller
         ]);
 
         // назначаем роли
-        $user->syncRoles($data['roles'] ?? []);
+//        $user->syncRoles($data['roles'] ?? []);
+        $roleIds = $data['roles'] ?? [];
+        $roles   = Role::whereIn('id', $roleIds)->get();
+
+        $user->syncRoles($roles);
 
         return redirect()->route('admin.users.index')->with('success', 'Пользователь создан');
     }
@@ -61,7 +65,11 @@ class UserController extends Controller
         }
 
         $user->save();
-        $user->syncRoles($data['roles'] ?? []);
+        $roleIds = $data['roles'] ?? [];
+        $roles   = Role::whereIn('id', $roleIds)->get();
+
+        $user->syncRoles($roles);
+//        $user->syncRoles($data['roles'] ?? []);
 
         return redirect()->route('admin.users.index')->with('success', 'Изменения сохранены');
     }
