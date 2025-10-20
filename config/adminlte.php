@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'admin',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => false,//'register',
@@ -305,11 +305,28 @@ return [
             'icon' => 'fas fa-fw fa-users',
             'can' => 'manage users',
         ],
+        // --- Каталог (товары) ---
         [
-            'text'  => 'Единицы измерения',
-            'route' => 'admin.units.index',
-            'icon'  => 'fas fa-ruler',
-            'can'   => 'manage products', // или своя permission 'manage units'
+            'text'    => 'Каталог',
+            'icon'    => 'fas fa-boxes',
+            'can'     => 'manage products',
+            'submenu' => [
+                [
+                    'text'  => 'Единицы измерения',
+                    'route' => 'admin.units.index',
+                    'icon'  => 'fas fa-ruler',
+                ],
+                [
+                    'text'  => 'Атрибуты',
+                    'route' => 'admin.attributes.index',
+                    'icon'  => 'fas fa-list',
+                ],
+                [
+                    'text'  => 'Шаблоны',
+                    'route' => 'admin.templates.index',
+                    'icon'  => 'fas fa-layer-group',
+                ],
+            ],
         ],
 //        // Navbar items:
 //        [

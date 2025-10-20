@@ -12,7 +12,8 @@ return new class extends Migration {
             $table->foreignId('unit_id')->nullable()->constrained('units')->nullOnDelete();
 //            $table->string('code', 64)->unique();
             $table->integer('priority')->default(0);
-            $table->enum('type', ['int', 'float', 'string', 'bool', 'datetime'])->default('string');
+//            $table->enum('type', ['int', 'float', 'string', 'bool', 'datetime'])->default('string');
+            $table->string('type')->default('string');
             $table->timestamps();
             $table->softDeletes();
         });

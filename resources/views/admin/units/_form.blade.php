@@ -41,10 +41,10 @@
                 <label class="form-label">Название ({{ strtoupper($locale) }})</label>
                 <input type="text" name="{{ $locale }}[title]" value="{{ $tr['title'] ?? '' }}" class="form-control">
             </div>
-            <div class="mb-3">
-                <label class="form-label">Описание ({{ strtoupper($locale) }})</label>
-                <textarea name="{{ $locale }}[content]" rows="3" class="form-control">{{ $tr['content'] ?? '' }}</textarea>
-            </div>
+{{--            <div class="mb-3">--}}
+{{--                <label class="form-label">Описание ({{ strtoupper($locale) }})</label>--}}
+{{--                <textarea name="{{ $locale }}[content]" rows="3" class="form-control">{{ $tr['content'] ?? '' }}</textarea>--}}
+{{--            </div>--}}
         </div>
     @endforeach
 </div>

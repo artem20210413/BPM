@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\TemplateController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
@@ -21,9 +23,11 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->
 
 Route::middleware(['auth', 'role:Admin|SuperAdmin'])->prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['role:Admin|SuperAdmin'])->group(function () {
-        Route::get('/admin', fn() => view('admin.dashboard'))->name('admin.dashboard');
+        Route::get('/', fn() => view('admin.dashboard'))->name('dashboard');
         Route::resource('units', UnitController::class)->except(['show']);
         Route::resource('users', UserController::class)->except(['show']);
+        Route::resource('attributes', AttributeController::class)->except(['show']);
+        Route::resource('templates',  TemplateController::class)->except(['show']);
     });
 });
 

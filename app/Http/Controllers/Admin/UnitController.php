@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Units\StoreUnitRequest;
+use App\Http\Requests\Admin\Units\UpdateUnitRequest;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -39,9 +41,10 @@ class UnitController extends Controller
         return view('admin.units.create', compact('unit', 'locales'));
     }
 
-    public function store(Request $request)
+    public function store(StoreUnitRequest $request)
     {
-        $data = $this->validateData($request);
+//        $data = $this->validateData($request);
+        $data = $request->validated();
 
         $unit = Unit::firstOrCreate(
             ['slug' => $data['slug']],
@@ -60,9 +63,9 @@ class UnitController extends Controller
         return view('admin.units.edit', compact('unit', 'locales'));
     }
 
-    public function update(Request $request, Unit $unit)
+    public function update(UpdateUnitRequest $request, Unit $unit)
     {
-        $data = $this->validateData($request, $unit->id);
+        $data = $request->validated();
 
         $unit->slug     = $data['slug'];
         $unit->priority = $data['priority'];
@@ -80,26 +83,6 @@ class UnitController extends Controller
         return redirect()->route('admin.units.index')->with('success', 'Единица удалена');
     }
 
-    private function validateData(Request $request, ?int $id = null): array
-    {
-        $rules = [
-            'slug'     => ['required','string','max:191', Rule::unique('units','slug')->ignore($id)],
-            'priority' => ['required','integer','between:0,100000'],
-        ];
-
-        // базовая локаль: title обязателен
-        $rules["{$this->primaryLocale}.title"]   = ['required','string','max:255'];
-        $rules["{$this->primaryLocale}.content"] = ['nullable','string'];
-
-        // остальные локали — опционально
-        foreach ($this->locales as $locale) {
-            if ($locale === $this->primaryLocale) continue;
-            $rules["$locale.title"]   = ['nullable','string','max:255'];
-            $rules["$locale.content"] = ['nullable','string'];
-        }
-
-        return $request->validate($rules);
-    }
 
 
     /** Заполнение переводов только если есть данные */

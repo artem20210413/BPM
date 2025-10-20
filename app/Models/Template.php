@@ -16,9 +16,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  */
-class Template extends Translation
+class Template extends TranslationContract
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['slug', 'data'];
+    protected $fillable = ['attribute_id', 'slug', 'data'];
+    public function attribute()
+    {
+        return $this->belongsTo(Attribute::class);
+    }
 }

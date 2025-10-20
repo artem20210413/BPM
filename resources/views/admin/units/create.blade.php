@@ -11,7 +11,7 @@
                 @include('admin.units._form')
                 <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('admin.units.index') }}" class="btn btn-secondary">Отмена</a>
-                    <button class="btn btn-primary">Сохранить</button>
+                    <button class="btn btn-primary ml-2">Сохранить</button>
                 </div>
             </form>
         </div>
