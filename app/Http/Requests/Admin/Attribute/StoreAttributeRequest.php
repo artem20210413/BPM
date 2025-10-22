@@ -25,7 +25,6 @@ class StoreAttributeRequest extends FormRequest
     {
         return [
             'unit_id'  => ['nullable','integer','exists:units,id'],
-//            'code'     => ['required','string','max:64','unique:attributes,code'],
             'priority' => ['required','integer','between:0,100000'],
             'type'     => ['required', Rule::in(['string','list','int','float','bool','datetime'])],
 

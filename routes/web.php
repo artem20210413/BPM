@@ -24,7 +24,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->
 Route::middleware(['auth', 'role:Admin|SuperAdmin'])->prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['role:Admin|SuperAdmin'])->group(function () {
         Route::get('/', fn() => view('admin.dashboard'))->name('dashboard');
-        Route::resource('units', UnitController::class)->except(['show']);
+        Route::resource('units', UnitController::class);//->except(['show']);
         Route::resource('users', UserController::class)->except(['show']);
         Route::resource('attributes', AttributeController::class)->except(['show']);
         Route::resource('templates',  TemplateController::class)->except(['show']);

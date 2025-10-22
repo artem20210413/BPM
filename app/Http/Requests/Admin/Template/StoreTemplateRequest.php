@@ -23,12 +23,12 @@ class StoreTemplateRequest extends FormRequest
     {
         return [
             'attribute_id' => ['required','integer','exists:attributes,id'],
-            'en.title'     => ['required','string','max:255'],
+            'ru.title'     => ['required','string','max:255'],
+            'ru.content'   => ['nullable','string'],
+            'en.title'     => ['nullable','string','max:255'],
             'en.content'   => ['nullable','string'],
             'ro.title'     => ['nullable','string','max:255'],
             'ro.content'   => ['nullable','string'],
-            'ru.title'     => ['nullable','string','max:255'],
-            'ru.content'   => ['nullable','string'],
         ];
     }
 }

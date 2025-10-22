@@ -5,23 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Units\StoreUnitRequest;
 use App\Http\Requests\Admin\Units\UpdateUnitRequest;
-use App\Models\Unit;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Validation\Rule;
+use App\Models\Unit\Unit;
 
 class UnitController extends Controller
 {
-    /** Локали проекта */
-    private array $locales = ['ru', 'en'];
-    private string $primaryLocale = 'en';
-
-    public function __construct()
-    {
-        $this->locales = config('app.locales');
-        $this->primaryLocale = App::getLocale();
-
-    }
 
     public function index()
     {
@@ -35,8 +22,8 @@ class UnitController extends Controller
 
     public function create()
     {
-        $locales = $this->locales;
         $unit = new Unit();
+        $locales = $unit->getLocales();
 
         return view('admin.units.create', compact('unit', 'locales'));
     }
@@ -44,14 +31,14 @@ class UnitController extends Controller
     public function store(StoreUnitRequest $request)
     {
 //        $data = $this->validateData($request);
-        $data = $request->validated();
+        $data = $request->array();
 
         $unit = Unit::firstOrCreate(
             ['slug' => $data['slug']],
             ['priority' => $data['priority']]
         );
 
-        $this->fillTranslations($unit, $data);
+        $unit->fillTranslations($data);
         $unit->save();
 
         return redirect()->route('admin.units.index')->with('success', 'Единица создана');
@@ -59,7 +46,7 @@ class UnitController extends Controller
 
     public function edit(Unit $unit)
     {
-        $locales = $this->locales;
+        $locales = $unit->getLocales();
         return view('admin.units.edit', compact('unit', 'locales'));
     }
 
@@ -67,10 +54,10 @@ class UnitController extends Controller
     {
         $data = $request->validated();
 
-        $unit->slug     = $data['slug'];
+        $unit->slug = $data['slug'];
         $unit->priority = $data['priority'];
 
-        $this->fillTranslations($unit, $data);
+        $unit->fillTranslations($data);
         $unit->save();
 
         return redirect()->route('admin.units.index')->with('success', 'Изменения сохранены');
@@ -84,18 +71,17 @@ class UnitController extends Controller
     }
 
 
-
     /** Заполнение переводов только если есть данные */
     private function fillTranslations(Unit $unit, array $data): void
     {
-        foreach ($this->locales as $locale) {
+        foreach ($unit->getLocales() as $locale) {
             $payload = $data[$locale] ?? null;
             if (!$payload) {
                 // ничего не передали для этой локали — пропускаем (не создаём пустой перевод)
                 continue;
             }
 
-            $title   = $payload['title']   ?? null;
+            $title = $payload['title'] ?? null;
             $content = $payload['content'] ?? null;
 
             // если оба поля пусты — не трогаем перевод, чтобы не писать NULL в NOT NULL
@@ -103,7 +89,7 @@ class UnitController extends Controller
                 continue;
             }
 
-            $unit->translateOrNew($locale)->title   = $title ?? '';     // на всякий случай пустая строка
+            $unit->translateOrNew($locale)->title = $title ?? '';     // на всякий случай пустая строка
             $unit->translateOrNew($locale)->content = $content ?? null;  // content может быть NULL
         }
     }

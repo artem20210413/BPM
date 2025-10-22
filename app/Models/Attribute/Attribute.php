@@ -1,10 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Attribute;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Category\Category;
+use App\Models\Product\ProductAttributeValue;
+use App\Models\Template\Template;
+use App\Models\Translation\TranslationContract;
+use App\Models\Unit\Unit;
+use App\Models\ValueTranslation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Attribute
@@ -24,11 +29,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Attribute extends TranslationContract
 {
     use HasFactory, SoftDeletes;
-
+    public $translationModel = AttributeTranslation::class;
+    private array $types = ['string', 'int', 'float', 'bool', 'datetime', 'list'];
     protected $fillable = ['slug', 'priority'];
-//    public $translationForeignKey = 'attribute_id';
-
-//    public function translations() { return $this->hasMany(ValueTranslation::class); }
 
     public function categories() {
         return $this->belongsToMany(Category::class, 'category_attributes');
@@ -46,5 +49,10 @@ class Attribute extends TranslationContract
     public function values()
     {
         return $this->hasMany(ProductAttributeValue::class);
+    }
+
+    public function getTypes(): array
+    {
+        return $this->types;
     }
 }

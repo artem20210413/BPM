@@ -321,11 +321,11 @@ return [
                     'route' => 'admin.attributes.index',
                     'icon'  => 'fas fa-list',
                 ],
-                [
-                    'text'  => 'Шаблоны',
-                    'route' => 'admin.templates.index',
-                    'icon'  => 'fas fa-layer-group',
-                ],
+//                [
+//                    'text'  => 'Шаблоны',
+//                    'route' => 'admin.templates.index',
+//                    'icon'  => 'fas fa-layer-group',
+//                ],
             ],
         ],
 //        // Navbar items:

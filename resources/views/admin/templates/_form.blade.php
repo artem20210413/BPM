@@ -1,16 +1,33 @@
 {{-- resources/views/admin/templates/_form.blade.php --}}
 @csrf
-<div class="mb-3">
-    <label class="form-label">Атрибут</label>
-    <select name="attribute_id" class="form-select @error('attribute_id') is-invalid @enderror" required>
-        @foreach($attributes as $attr)
-            <option value="{{ $attr->id }}" @selected(old('attribute_id', $template->attribute_id ?? '') == $attr->id)>
-                {{ $attr->translate('ru')->title ?? $attr->code }}
-            </option>
-        @endforeach
-    </select>
-    @error('attribute_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-</div>
+
+@if ($errors->any())
+    @dump($errors)
+    <div class="alert alert-danger">
+        <div class="d-flex align-items-center mb-2">
+            <strong>Пожалуйста, исправьте ошибки:</strong>
+        </div>
+        <ul class="mb-0 ps-3">
+            @foreach ($errors->all() as $key => $err)
+                <li>{{"$key : $err" }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
+<input type="hidden" name="attribute_id" value="{{request('attr')}}">
+{{--<div class="mb-3">--}}
+{{--    <label class="form-label">Атрибут</label>--}}
+{{--    <select name="attribute_id" class="form-select @error('attribute_id') is-invalid @enderror" required>--}}
+{{--        @foreach($attributes as $attr)--}}
+{{--            <option value="{{ $attr->id }}" @selected(old('attribute_id', $template->attribute_id ?? '') == $attr->id)>--}}
+{{--                {{ $attr->translate('ru')->title ?? $attr->code }}--}}
+{{--            </option>--}}
+{{--        @endforeach--}}
+{{--    </select>--}}
+{{--    @error('attribute_id') <div class="invalid-feedback">{{ $message }}</div> @enderror--}}
+{{--</div>--}}
 
 <ul class="nav nav-tabs" role="tablist">
     @foreach($locales as $i => $locale)
@@ -29,12 +46,12 @@
         <div class="tab-pane fade @if($i===0) show active @endif" id="tab-{{ $locale }}" role="tabpanel">
             <div class="mb-3">
                 <label class="form-label">Название ({{ strtoupper($locale) }})</label>
-                <input type="text" name="{{ $locale }}[title]" value="{{ $tr['title'] ?? '' }}" class="form-control" @if($locale==='en') required @endif>
+                <input type="text" name="{{ $locale }}[title]" value="{{ $tr['title'] ?? '' }}" class="form-control" @if($locale==='ru') required @endif>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Описание ({{ strtoupper($locale) }})</label>
-                <textarea name="{{ $locale }}[content]" rows="3" class="form-control">{{ $tr['content'] ?? '' }}</textarea>
-            </div>
+{{--            <div class="mb-3">--}}
+{{--                <label class="form-label">Описание ({{ strtoupper($locale) }})</label>--}}
+{{--                <textarea name="{{ $locale }}[content]" rows="3" class="form-control">{{ $tr['content'] ?? '' }}</textarea>--}}
+{{--            </div>--}}
         </div>
     @endforeach
 </div>

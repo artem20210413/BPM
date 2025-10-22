@@ -1,13 +1,26 @@
 {{-- resources/views/admin/units/_form.blade.php --}}
 @csrf
-
+@if ($errors->any())
+    @dump($errors->all())
+    <div class="alert alert-danger">
+        <div class="d-flex align-items-center mb-2">
+            <strong>Пожалуйста, исправьте ошибки:</strong>
+        </div>
+        <ul class="mb-0 ps-3">
+            @foreach ($errors->all() as $key => $err)
+                <li>{{"$key : $err" }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <div class="row">
     <div class="col-md-4">
         <div class="mb-3">
             <label class="form-label">Slug</label>
             <input type="text" name="slug" value="{{ old('slug', $unit->slug ?? '') }}"
                    class="form-control @error('slug') is-invalid @enderror" required>
-            @error('slug') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            @error('slug')
+            <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
     </div>
     <div class="col-md-4">
@@ -15,7 +28,8 @@
             <label class="form-label">Приоритет</label>
             <input type="number" name="priority" value="{{ old('priority', $unit->priority ?? 0) }}"
                    class="form-control @error('priority') is-invalid @enderror" required>
-            @error('priority') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            @error('priority')
+            <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
     </div>
 </div>
@@ -41,10 +55,6 @@
                 <label class="form-label">Название ({{ strtoupper($locale) }})</label>
                 <input type="text" name="{{ $locale }}[title]" value="{{ $tr['title'] ?? '' }}" class="form-control">
             </div>
-{{--            <div class="mb-3">--}}
-{{--                <label class="form-label">Описание ({{ strtoupper($locale) }})</label>--}}
-{{--                <textarea name="{{ $locale }}[content]" rows="3" class="form-control">{{ $tr['content'] ?? '' }}</textarea>--}}
-{{--            </div>--}}
         </div>
     @endforeach
 </div>

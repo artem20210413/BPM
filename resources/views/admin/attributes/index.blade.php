@@ -5,7 +5,9 @@
 @section('page_title','Атрибуты')
 
 @section('content')
-    @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -20,11 +22,10 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Код</th>
+                    <th>Название (ru)</th>
                     <th>Тип</th>
                     <th>Ед. изм.</th>
                     <th>Приоритет</th>
-                    <th>Название (ru)</th>
                     <th class="text-end">Действия</th>
                 </tr>
                 </thead>
@@ -32,24 +33,33 @@
                 @forelse($attributes as $attr)
                     <tr>
                         <td>{{ $attr->id }}</td>
-{{--                        <td><code>{{ $attr->code }}</code></td>--}}
+                        <td>{{ optional($attr->translate('ru'))->title }}</td>
+                        {{--                        <td><code>{{ $attr->code }}</code></td>--}}
                         <td>{{ $attr->type }}</td>
                         <td>{{ $attr->unit?->slug }}</td>
                         <td>{{ $attr->priority }}</td>
-                        <td>{{ optional($attr->translate('ru'))->title }}</td>
                         <td class="text-end">
                             <a href="{{ route('admin.attributes.edit', $attr) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>
                             </a>
+
                             <form action="{{ route('admin.attributes.destroy', $attr) }}" method="POST" class="d-inline"
                                   onsubmit="return confirm('Удалить атрибут?')">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                             </form>
+                            @if($attr->type === 'list')
+                                <a href="{{ route('admin.templates.index', ['attr' =>$attr]) }}"
+                                   class="btn btn-sm btn-primary">
+                                    Шаблоны
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="text-center text-muted">Пока пусто</td></tr>
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">Пока пусто</td>
+                    </tr>
                 @endforelse
                 </tbody>
             </table>

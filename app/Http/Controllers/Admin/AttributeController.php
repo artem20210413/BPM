@@ -6,23 +6,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Attribute\StoreAttributeRequest;
 use App\Http\Requests\Admin\Attribute\UpdateAttributeRequest;
-use App\Models\Attribute;
-use App\Models\Unit;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
+use App\Models\Attribute\Attribute;
+use App\Models\Unit\Unit;
 
 class AttributeController extends Controller
 {
-    private array $locales = ['en','ro','ru'];
-
-    public function __construct()
-    {
-        $this->locales = config('app.locales');
-
-    }
-
-    // какие типы поддерживаем
-    private array $types = ['string','int','float','bool','datetime', 'list'];
 
     public function index()
     {
@@ -39,11 +27,13 @@ class AttributeController extends Controller
 
     public function create()
     {
+        $attribute = new Attribute();
+
         return view('admin.attributes.create', [
-            'attribute' => new Attribute(),
-            'units'     => Unit::orderBy('priority')->get(),
-            'types'     => $this->types,
-            'locales'   => $this->locales,
+            'attribute' => $attribute,
+            'units' => Unit::orderBy('priority')->get(),
+            'types' => $attribute->getTypes(),
+            'locales' => $attribute->getLocales(),
         ]);
     }
 
@@ -52,15 +42,14 @@ class AttributeController extends Controller
         $data = $request->validated();
 
         $attr = new Attribute();
-        $attr->unit_id  = $data['unit_id'] ?? null;
-//        $attr->code     = $data['code'];
+        $attr->unit_id = $data['unit_id'] ?? null;
         $attr->priority = $data['priority'];
-        $attr->type     = $data['type'];
+        $attr->type = $data['type'];
 
         // переводы
-        foreach ($this->locales as $locale) {
+        foreach ($attr->getLocales() as $locale) {
             if (!empty($data[$locale])) {
-                $attr->translateOrNew($locale)->title   = $data[$locale]['title'] ?? '';
+                $attr->translateOrNew($locale)->title = $data[$locale]['title'] ?? '';
                 $attr->translateOrNew($locale)->content = $data[$locale]['content'] ?? null;
             }
         }
@@ -74,9 +63,9 @@ class AttributeController extends Controller
     {
         return view('admin.attributes.edit', [
             'attribute' => $attribute,
-            'units'     => Unit::orderBy('priority')->get(),
-            'types'     => $this->types,
-            'locales'   => $this->locales,
+            'units' => Unit::orderBy('priority')->get(),
+            'types' => $attribute->getTypes(),
+            'locales' => $attribute->getLocales(),
         ]);
     }
 
@@ -84,14 +73,13 @@ class AttributeController extends Controller
     {
         $data = $request->validated();
 
-        $attribute->unit_id  = $data['unit_id'] ?? null;
-//        $attribute->code     = $data['code'];
+        $attribute->unit_id = $data['unit_id'] ?? null;
         $attribute->priority = $data['priority'];
-        $attribute->type     = $data['type'];
+        $attribute->type = $data['type'];
 
-        foreach ($this->locales as $locale) {
+        foreach ($attribute->getLocales() as $locale) {
             if (!empty($data[$locale])) {
-                $attribute->translateOrNew($locale)->title   = $data[$locale]['title'] ?? '';
+                $attribute->translateOrNew($locale)->title = $data[$locale]['title'] ?? '';
                 $attribute->translateOrNew($locale)->content = $data[$locale]['content'] ?? null;
             }
         }

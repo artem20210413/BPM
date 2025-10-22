@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Unit;
+use App\Models\Unit\Unit;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class UnitsSeeder extends Seeder
 {

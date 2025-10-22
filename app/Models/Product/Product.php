@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Product;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Attribute\Attribute;
+use App\Models\Category\Category;
+use App\Models\Translation\TranslationContract;
+use App\Models\Unit\Unit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Product
@@ -25,6 +28,7 @@ class Product extends TranslationContract
 {
     use HasFactory, SoftDeletes;
 
+    public $translationModel = ProductTranslation::class;
     protected $fillable = ['category_id', 'slug', 'unit_id'];
 
     public function category() { return $this->belongsTo(Category::class); }

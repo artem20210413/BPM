@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Category;
 
-use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
-use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Attribute\Attribute;
+use App\Models\Product\Product;
+use App\Models\Translation\TranslationContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Category
@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Category extends TranslationContract
 {
     use HasFactory, SoftDeletes;
+
+    public $translationModel = CategoryTranslation::class;
 
     protected $fillable = [
         'parent_id',

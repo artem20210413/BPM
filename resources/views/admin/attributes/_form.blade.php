@@ -1,6 +1,19 @@
 {{-- resources/views/admin/attributes/_form.blade.php --}}
 @csrf
 
+@if ($errors->any())
+    @dump($errors)
+    <div class="alert alert-danger">
+        <div class="d-flex align-items-center mb-2">
+            <strong>Пожалуйста, исправьте ошибки:</strong>
+        </div>
+        <ul class="mb-0 ps-3">
+            @foreach ($errors->all() as $key => $err)
+                <li>{{"$key : $err" }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <div class="row">
 {{--    <div class="col-md-3">--}}
 {{--        <div class="mb-3">--}}

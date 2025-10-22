@@ -6,23 +6,27 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Template\StoreTemplateRequest;
 use App\Http\Requests\Admin\Template\UpdateTemplateRequest;
-use App\Models\Template;
-use App\Models\Attribute;
+use App\Models\Attribute\Attribute;
+use App\Models\Template\Template;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class TemplateController extends Controller
 {
-    private array $locales = ['en','ro','ru'];
+    private array $locales = ['en', 'ro', 'ru'];
 
     public function __construct()
     {
         $this->locales = config('app.locales');
 
     }
-    public function index()
+
+    public function index(Request $request)
     {
-        $templates = Template::with('attribute')->orderByDesc('id')->paginate(20);
+        $templates = Template::query();
+        if ($attr = $request->attr) {
+            $templates->where('attribute_id', $attr);
+        }
+        $templates = $templates->with('attribute')->orderByDesc('id')->paginate(20);
 
         return view('admin.templates.index', compact('templates'));
     }
@@ -30,12 +34,12 @@ class TemplateController extends Controller
     public function create()
     {
         $attributes = Attribute::orderBy('priority')->get();
-        $template   = new Template();
+        $template = new Template();
 
         return view('admin.templates.create', [
-            'template'   => $template,
+            'template' => $template,
             'attributes' => $attributes,
-            'locales'    => $this->locales,
+            'locales' => $this->locales,
         ]);
     }
 
@@ -48,14 +52,15 @@ class TemplateController extends Controller
 
         foreach ($this->locales as $locale) {
             if (!empty($data[$locale])) {
-                $template->translateOrNew($locale)->title   = $data[$locale]['title'] ?? '';
+                $template->translateOrNew($locale)->title = $data[$locale]['title'] ?? '';
                 $template->translateOrNew($locale)->content = $data[$locale]['content'] ?? null;
             }
         }
 
         $template->save();
 
-        return redirect()->route('admin.templates.index')->with('success', 'Шаблон создан');
+//        return redirect()->route('admin.templates.index')->with('success', 'Шаблон создан');
+        return redirect()->route('admin.templates.index', $request->all())->with('success', 'Изменения сохранены');
     }
 
     public function edit(Template $template)
@@ -63,9 +68,9 @@ class TemplateController extends Controller
         $attributes = Attribute::orderBy('priority')->get();
 
         return view('admin.templates.edit', [
-            'template'   => $template,
+            'template' => $template,
             'attributes' => $attributes,
-            'locales'    => $this->locales,
+            'locales' => $this->locales,
         ]);
     }
 
@@ -77,14 +82,14 @@ class TemplateController extends Controller
 
         foreach ($this->locales as $locale) {
             if (!empty($data[$locale])) {
-                $template->translateOrNew($locale)->title   = $data[$locale]['title'] ?? '';
+                $template->translateOrNew($locale)->title = $data[$locale]['title'] ?? '';
                 $template->translateOrNew($locale)->content = $data[$locale]['content'] ?? null;
             }
         }
 
         $template->save();
 
-        return redirect()->route('admin.templates.index')->with('success', 'Изменения сохранены');
+        return redirect()->route('admin.templates.index', $request->all())->with('success', 'Изменения сохранены');
     }
 
     public function destroy(Template $template)

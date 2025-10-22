@@ -25,11 +25,9 @@ class StoreUnitRequest extends FormRequest
             'slug' => ['required', 'string', 'max:191', 'unique:units,slug'],
             'priority' => ['nullable', 'integer', 'between:0,999999'],
 
-            'translations' => ['required', 'array'],
-            'translations.ru.title' => ['required', 'string', 'max:255'],
-            'translations.ru.content' => ['nullable', 'string'],
-            'translations.ro.title' => ['required', 'string', 'max:255'],
-            'translations.ro.content' => ['nullable', 'string'],
+            'ru.title' => ['required', 'string', 'max:255'],
+            'en.title' => ['nullable', 'string', 'max:255'],
+            'ro.title' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

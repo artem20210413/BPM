@@ -26,15 +26,15 @@ class UpdateAttributeRequest extends FormRequest
 
         return [
             'unit_id'  => ['nullable','integer','exists:units,id'],
-            'code'     => ['required','string','max:64', Rule::unique('attributes','code')->ignore($id)],
+//            'code'     => ['required','string','max:64', Rule::unique('attributes','code')->ignore($id)],
             'priority' => ['required','integer','between:0,100000'],
             'type'     => ['required', Rule::in(['string','text','int','float','bool','datetime'])],
 
-            'en.title'   => ['required','string','max:255'],
+            'en.title'   => ['nullable','string','max:255'],
             'en.content' => ['nullable','string'],
             'ro.title'   => ['nullable','string','max:255'],
             'ro.content' => ['nullable','string'],
-            'ru.title'   => ['nullable','string','max:255'],
+            'ru.title'   => ['required','string','max:255'],
             'ru.content' => ['nullable','string'],
         ];
     }

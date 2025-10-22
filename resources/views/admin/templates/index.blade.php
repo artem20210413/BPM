@@ -5,12 +5,15 @@
 @section('page_title','Шаблоны')
 
 @section('content')
-    @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title">Список</h3>
-            <a href="{{ route('admin.templates.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Создать</a>
+            <a href="{{ route('admin.templates.create', request()->all()) }}" class="btn btn-primary"><i
+                    class="fas fa-plus"></i> Создать</a>
         </div>
 
         <div class="card-body table-responsive p-0">
@@ -30,7 +33,8 @@
                         <td>{{ $tpl->attribute?->translate('ru')?->title }}</td>
                         <td>{{ $tpl->translate('ru')?->title }}</td>
                         <td class="text-end">
-                            <a href="{{ route('admin.templates.edit', $tpl) }}" class="btn btn-sm btn-warning">
+                            <a href="{{ route('admin.templates.edit', [$tpl] + request()->all()) }}"
+                               class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <form action="{{ route('admin.templates.destroy', $tpl) }}" method="POST" class="d-inline"
@@ -41,7 +45,9 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="4" class="text-center text-muted">Нет данных</td></tr>
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">Нет данных</td>
+                    </tr>
                 @endforelse
                 </tbody>
             </table>

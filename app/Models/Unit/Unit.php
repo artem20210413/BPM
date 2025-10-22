@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Unit;
 
+use App\Models\Product\Product;
+use App\Models\Translation\TranslationContract;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
-use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -23,6 +22,8 @@ class Unit extends TranslationContract
 
     use HasFactory, SoftDeletes;
 
+    /** Необязательно, но удобно явно указать модель перевода */
+    public $translationModel = UnitTranslation::class;
     protected $fillable = ['slug', 'priority'];
 
     protected $casts = ['priority' => 'integer'];
