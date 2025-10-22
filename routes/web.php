@@ -6,11 +6,18 @@ use App\Http\Controllers\Admin\TemplateController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\PageController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+// FRONT ROUTES
+Route::middleware([])->group(function () {
+    Route::get('/',         [HomeController::class, 'index']);
+    Route::get('/about',    [PageController::class, 'about'])->name('about');
+    Route::get('/services',    [PageController::class, 'services'])->name('services');
+    Route::get('/contact',  [PageController::class, 'contact']);
 });
+// END FRONT ROUTES
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
